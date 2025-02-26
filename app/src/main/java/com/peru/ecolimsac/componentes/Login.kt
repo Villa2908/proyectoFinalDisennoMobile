@@ -76,7 +76,7 @@ fun editText(@StringRes text: Int, modifier: Modifier = Modifier) {
             value = ingreso, onValueChange = {nuevaEntrada -> ingreso = nuevaEntrada },
             modifier = modifier
                 .background(Color.White)
-                .paddingFromBaseline(bottom = 15.dp)
+                .padding(bottom = 10.dp)
                 .fillMaxWidth(0.75f),
             label = {
                 Text(
