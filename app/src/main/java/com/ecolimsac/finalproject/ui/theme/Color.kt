@@ -1,4 +1,4 @@
-package com.peru.ecolimsac.ui.theme
+package com.ecolimsac.finalproject.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

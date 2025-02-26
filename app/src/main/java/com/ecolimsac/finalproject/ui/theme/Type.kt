@@ -1,4 +1,4 @@
-package com.peru.ecolimsac.ui.theme
+package com.ecolimsac.finalproject.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

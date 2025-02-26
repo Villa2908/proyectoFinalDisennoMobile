@@ -2,14 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
 }
 
 android {
-    namespace = "com.peru.ecolimsac"
+    namespace = "com.ecolimsac.finalproject"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.peru.ecolimsac"
+        applicationId = "com.ecolimsac.finalproject"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -56,4 +57,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(platform(libs.firebase.bom))
 }

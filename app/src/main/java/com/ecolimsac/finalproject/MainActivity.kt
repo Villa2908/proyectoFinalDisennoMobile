@@ -1,4 +1,4 @@
-package com.peru.ecolimsac
+package com.ecolimsac.finalproject
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,11 +13,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.peru.ecolimsac.componentes.entradaLogin
-import com.peru.ecolimsac.componentes.logo
-import com.peru.ecolimsac.ui.theme.ECOLIMSACTheme
+import com.ecolimsac.finalproject.componentes.entradaLogin
+import com.ecolimsac.finalproject.componentes.logo
+import com.ecolimsac.finalproject.ui.theme.ECOLIMSACTheme
 
 class MainActivity : ComponentActivity() {
+
+    //private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

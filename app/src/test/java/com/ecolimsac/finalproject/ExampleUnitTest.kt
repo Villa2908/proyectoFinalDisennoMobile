@@ -1,4 +1,4 @@
-package com.peru.ecolimsac
+package com.ecolimsac.finalproject
 
 import org.junit.Test
 
