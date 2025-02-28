@@ -5,11 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.ecolimsac.finalproject.R
 
 @Composable
-fun logo(modifier: Modifier = Modifier) {
+fun Logo(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxWidth(1f),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,15 +54,15 @@ fun logo(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun entradaLogin(modifier: Modifier = Modifier) {
+fun EntradaLogin(modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth(1f)) {
-        editText(R.string.Email)
-        editText(R.string.Password)
+        EditText(R.string.Email)
+        EditText(R.string.Password)
     }
 }
 
 @Composable
-fun editText(@StringRes text: Int, modifier: Modifier = Modifier) {
+fun EditText(@StringRes text: Int, modifier: Modifier = Modifier) {
     var ingreso by remember { mutableStateOf("") }
     Row(
         modifier = modifier.fillMaxWidth(1f),
@@ -68,7 +70,7 @@ fun editText(@StringRes text: Int, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.Center
     ) {
         TextField(
-            value = ingreso, onValueChange = {nuevaEntrada -> ingreso = nuevaEntrada },
+            value = ingreso, onValueChange = { nuevaEntrada -> ingreso = nuevaEntrada },
             modifier = modifier
                 .background(Color.White)
                 .padding(bottom = 10.dp)
@@ -85,8 +87,27 @@ fun editText(@StringRes text: Int, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+fun BotonLogueo(modifier: Modifier = Modifier, text: String?, funcion: (()->Unit)? = null) {
+    Button(
+        onClick = {
+            funcion?.invoke()
+        /* Realizar funcion inicio sesion*/
+        },
+        modifier = modifier,
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            text?.let { Text(text = it)}
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun previewEntradaLogin() {
-    entradaLogin()
+    BotonLogueo(text = "Iniciar sesion")
 }
