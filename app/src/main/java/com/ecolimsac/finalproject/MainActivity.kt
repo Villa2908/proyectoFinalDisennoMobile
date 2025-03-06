@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.ecolimsac.finalproject.componentes.EntradaLogin
 import com.ecolimsac.finalproject.componentes.Logo
 import com.ecolimsac.finalproject.componentes.Navegador
@@ -31,18 +32,18 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Login(padding: PaddingValues) {
+fun Login(padding: PaddingValues, navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Logo(Modifier)
-        EntradaLogin(Modifier)
+        EntradaLogin(Modifier, navController)
     }
 }
 
 @Composable
-fun Start(modifier: Modifier = Modifier) {
+fun Start(modifier: Modifier = Modifier, navController: NavController) {
     ECOLIMSACTheme {
         Scaffold(
             modifier = modifier
@@ -51,7 +52,7 @@ fun Start(modifier: Modifier = Modifier) {
             Column(modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
-            ) { Login(it) }
+            ) { Login(it, navController) }
         }
     }
 }

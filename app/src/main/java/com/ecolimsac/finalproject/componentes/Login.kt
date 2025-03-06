@@ -3,7 +3,6 @@ package com.ecolimsac.finalproject.componentes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,13 +13,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,17 +33,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.ecolimsac.finalproject.R
+import com.ecolimsac.finalproject.views.Vistas
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import kotlinx.coroutines.launch
 
 @Composable
 fun Logo(modifier: Modifier = Modifier) {
@@ -68,19 +65,25 @@ fun Logo(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EntradaLogin(modifier: Modifier = Modifier) {
+fun EntradaLogin(modifier: Modifier = Modifier, navigationController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val paddingInterno = PaddingValues(16.dp)
+    var clickable by remember { mutableStateOf(true) }
+    var estadoAlerta by remember { mutableStateOf(false) }
+    var request by remember { mutableStateOf("") }
+    var alertErrorLogin by remember { mutableStateOf(false ) }
 
     Column(
         modifier = modifier.fillMaxWidth(1f),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        EditText(text = R.string.Email, valor = email,
+        EditText(
+            text = R.string.Email, valor = email,
             estadoTexto = { email = it },
-            tipoEntry = VisualTransformation.None)
+            tipoEntry = VisualTransformation.None
+        )
         Spacer(modifier.size(12.dp))
         EditText(
             R.string.Password,
@@ -95,12 +98,29 @@ fun EntradaLogin(modifier: Modifier = Modifier) {
             modifier = modifier
                 .fillMaxWidth(0.80f)
         ) {
-            Button(onClick = {
-                loginEmailAndPass(email, password)
-            }, contentPadding = paddingInterno) {
+            Button(
+                onClick = {
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        loginEmailAndPass(email, password, navigationController)
+                    }else{
+                        println("Llene los datos correctamente")
+                    }
+                }, contentPadding = paddingInterno,
+                enabled = clickable
+            ) {
                 Text(text = "Iniciar Sesion")
             }
-            OutlinedButton(onClick = {}, contentPadding = paddingInterno) {
+            OutlinedButton(
+                onClick = {
+                    // Mostrar AlertDialog si el estado está activo
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        CreateEmailAndPass(email, password)
+                        estadoAlerta = true
+                        request = CreateEmailAndPass(email, password)
+                    } else println("Llene los datos correctamente")
+                }, contentPadding = paddingInterno,
+                enabled = clickable
+            ) {
                 Text(text = "Crear Cuenta")
             }
         }
@@ -109,6 +129,19 @@ fun EntradaLogin(modifier: Modifier = Modifier) {
             Text(
                 text = "Inicie con Google",
                 color = MaterialTheme.colorScheme.secondary
+            )
+        }
+
+        if (estadoAlerta) {
+            AlertDialog(
+                onDismissRequest = { estadoAlerta = false },
+                title = { Text("Creación de usuario") },
+                text = { Text(request) },
+                confirmButton = {
+                    Button(onClick = { estadoAlerta = false }) {
+                        Text("Aceptar")
+                    }
+                }
             )
         }
     }
@@ -126,7 +159,6 @@ fun EditText(
         value = valor,
         onValueChange = estadoTexto,
         modifier = modifier
-            .background(Color.White)
             .fillMaxWidth(0.80f)
             .padding(2.dp),
         label = {
@@ -143,24 +175,30 @@ fun EditText(
 }
 
 
-@Preview
-@Composable
-private fun previewEntradaLogin() {
-    EntradaLogin()
-}
-
-fun loginEmailAndPass(email: String, pass: String) {
+fun loginEmailAndPass(email: String, pass: String, navigationController: NavController){
     val auth: FirebaseAuth = Firebase.auth
-    val _loading = MutableLiveData(false)
-
     auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
         if (task.isSuccessful) {
             println("Inicio Correcto")
+            navigationController.navigate(Vistas.home.id + "/$email")
         } else {
             println("Inicio Incorrecto")
         }
     }
-    println("usuario: $email, $pass")
 }
 
+fun CreateEmailAndPass(email: String, pass: String): String {
+    val auth: FirebaseAuth = Firebase.auth
+    var text = false
+    var razon = ""
 
+    auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            text = true
+        } else {
+            text = false
+            razon = task.result.toString()
+        }
+    }
+    if (text) return "Se creó correctamente el usuario" else return razon
+}
