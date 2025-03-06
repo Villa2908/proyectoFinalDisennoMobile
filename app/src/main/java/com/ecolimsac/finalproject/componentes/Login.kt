@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ecolimsac.finalproject.R
+import com.ecolimsac.finalproject.entidad.Usuario
 import com.ecolimsac.finalproject.views.Vistas
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -72,7 +73,7 @@ fun EntradaLogin(modifier: Modifier = Modifier, navigationController: NavControl
     var clickable by remember { mutableStateOf(true) }
     var estadoAlerta by remember { mutableStateOf(false) }
     var request by remember { mutableStateOf("") }
-    var alertErrorLogin by remember { mutableStateOf(false ) }
+    var usuario: Usuario
 
     Column(
         modifier = modifier.fillMaxWidth(1f),
@@ -101,7 +102,8 @@ fun EntradaLogin(modifier: Modifier = Modifier, navigationController: NavControl
             Button(
                 onClick = {
                     if (email.isNotEmpty() && password.isNotEmpty()) {
-                        loginEmailAndPass(email, password, navigationController)
+                        usuario = Usuario(email=email,pass = password)
+                        loginEmailAndPass(usuario.email, usuario.pass, navigationController)
                     }else{
                         println("Llene los datos correctamente")
                     }
